@@ -28,3 +28,6 @@ include ../pd-lib-builder/Makefile.pdlibbuilder
 
 tags:
 	find . ~/git_checkouts/pure-data -name '*.[ch]' | etags -
+
+test:
+	cp counter.pd_linux ~/pd-externals/; pd ./counter.pd
