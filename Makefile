@@ -1,6 +1,6 @@
 # Makefile for 
 
-lib.name = counter
+lib.name = pil
 
 common.sources = embeddableMiniPicoLisp/src/apply.c \
 embeddableMiniPicoLisp/src/math.c \
@@ -15,7 +15,7 @@ embeddableMiniPicoLisp/src/main.c
 
 cflags+= -IembeddableMiniPicoLisp/src/
 
-class.sources = counter.c
+class.sources = pil.c
 
 #datafiles = myclass1-help.pd myclass2-help.pd README.txt LICENSE.txt
 
@@ -30,4 +30,4 @@ tags:
 	find . ~/git_checkouts/pure-data -name '*.[ch]' | etags -
 
 test:
-	cp counter.pd_linux ~/pd-externals/; pd ./counter.pd
+	cp pil.pd_linux ~/pd-externals/; pd ./pil.pd
