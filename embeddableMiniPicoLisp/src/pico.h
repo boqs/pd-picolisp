@@ -522,6 +522,8 @@ any doYoke(any);
 any doZap(any);
 any doZero(any);
 
+void readLispString(char* inString);
+
 /* List element access */
 static inline any nCdr(int n, any x) {
    while (--n >= 0)

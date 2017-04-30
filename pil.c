@@ -12,9 +12,9 @@ typedef struct _pil {
   t_outlet *f_out, *b_out;
 } t_pil;
 
-void pil_bang(t_pil *x) {
-  printf("bang\n");
-}
+/* void pil_bang(t_pil *x) { */
+/*   printf("bang\n"); */
+/* } */
 
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
   t_pil *x = (t_pil *)pd_new(pil_class);
@@ -22,8 +22,8 @@ void *pil_new(t_symbol *s, int argc, t_atom *argv) {
   return (void *)x;
 }
 
-char txt_buffer[1024];
-char spare_txt_buffer[1024];
+char txt_buffer[128 * 1024];
+char spare_txt_buffer[128 * 1024];
 void my_anything_method(t_pil *x, t_symbol *s, int argc, t_atom *argv) {
   txt_buffer[0] = 0;
   spare_txt_buffer[0] = 0;
@@ -48,6 +48,21 @@ void my_anything_method(t_pil *x, t_symbol *s, int argc, t_atom *argv) {
   post(spare_txt_buffer);
 }
 
+void pil_load(t_pil *x, t_symbol *s) {
+  printf("load: %s\n", s->s_name);
+  FILE *f = fopen(s->s_name, "r");
+  if (f) {
+    fread(txt_buffer, sizeof(txt_buffer), 1, f);
+    fclose(f);
+    outputCursor = outputBuffer;
+    *outputCursor = 0;
+    readLispString(txt_buffer);
+    *outputCursor = 0;
+    sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
+    post(spare_txt_buffer);
+  }
+}
+
 void pil_setup(void) {
   pil_class = class_new(gensym("pil"),
 			    (t_newmethod)pil_new,
@@ -57,6 +72,10 @@ void pil_setup(void) {
   /* class_addsymbol(pil_class, my_symbol_method); */
   /* class_addfloat(pil_class, my_float_method); */
   class_addanything(pil_class, my_anything_method);
+  class_addmethod(pil_class,  
+		  (t_method)pil_load, gensym("load"),
+		  A_SYMBOL, 0);  
+
   /* class_addlist(pil_class, my_list_method); */
   class_sethelpsymbol(pil_class, gensym("help-pil"));
 }
