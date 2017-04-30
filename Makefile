@@ -21,10 +21,7 @@ class.sources = pil.c
 
 PDINCLUDEDIR=/usr/local/include/pd
 
-include ../pd-lib-builder/Makefile.pdlibbuilder
-
-# snosh :
-# 	echo $(common.sources)
+include Makefile.pdlibbuilder
 
 tags:
 	find . ~/git_checkouts/pure-data -name '*.[ch]' | etags -

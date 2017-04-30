@@ -9,7 +9,7 @@ typedef struct _pil {
   t_float step;
   t_symbol inSym;
   t_int i_down, i_up;
-  t_outlet *f_out, *b_out;
+  t_outlet *out;
 } t_pil;
 
 /* void pil_bang(t_pil *x) { */
@@ -19,6 +19,8 @@ typedef struct _pil {
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
   t_pil *x = (t_pil *)pd_new(pil_class);
   pil_init();
+  x->out = outlet_new(&x->x_obj, &s_symbol);  
+
   return (void *)x;
 }
 
@@ -45,7 +47,8 @@ void my_anything_method(t_pil *x, t_symbol *s, int argc, t_atom *argv) {
   readLispString(txt_buffer);
   *outputCursor = 0;
   sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
-  post(spare_txt_buffer);
+  /* post(spare_txt_buffer); */
+  outlet_symbol(x->out, gensym(spare_txt_buffer));  
 }
 
 void pil_load(t_pil *x, t_symbol *s) {
@@ -59,7 +62,8 @@ void pil_load(t_pil *x, t_symbol *s) {
     readLispString(txt_buffer);
     *outputCursor = 0;
     sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
-    post(spare_txt_buffer);
+    /* post(spare_txt_buffer); */
+    outlet_symbol(x->out, gensym(spare_txt_buffer));  
   }
 }
 
