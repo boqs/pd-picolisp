@@ -703,6 +703,13 @@ any stringToSym(char* str) {
   return symName;
 }
 
+any callLisp1 (char *fnName, any arg1) {
+  if (!setjmp(ErrRst))
+    return evList(cons(stringToSym(fnName),
+		       cons(arg1, Nil)));
+  else
+    return Nil;
+}
 any testCallLisp (char *fnName, any arg1, any arg2, any arg3) {
   return evList(cons(stringToSym(fnName),
 		     cons(arg1,

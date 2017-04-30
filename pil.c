@@ -12,10 +12,6 @@ typedef struct _pil {
   t_outlet *out;
 } t_pil;
 
-/* void pil_bang(t_pil *x) { */
-/*   printf("bang\n"); */
-/* } */
-
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
   t_pil *x = (t_pil *)pd_new(pil_class);
   pil_init();
@@ -46,9 +42,17 @@ void my_anything_method(t_pil *x, t_symbol *s, int argc, t_atom *argv) {
   *outputCursor = 0;
   readLispString(txt_buffer);
   *outputCursor = 0;
-  sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
+  sprintf(spare_txt_buffer, "%s", outputBuffer);
   /* post(spare_txt_buffer); */
   outlet_symbol(x->out, gensym(spare_txt_buffer));  
+}
+void pil_bang(t_pil *x) {
+  outputCursor = outputBuffer;
+  *outputCursor = 0;
+  readLispString("(bang)\n");
+  *outputCursor = 0;
+  /* post(spare_txt_buffer); */
+  /* outlet_symbol(x->out, gensym(outputBuffer));   */
 }
 
 void pil_load(t_pil *x, t_symbol *s) {
@@ -73,6 +77,7 @@ void pil_setup(void) {
 			    0, sizeof(t_pil),
 			    CLASS_DEFAULT,
 			    A_GIMME, 0);
+  class_addbang  (pil_class, pil_bang);  
   /* class_addsymbol(pil_class, my_symbol_method); */
   /* class_addfloat(pil_class, my_float_method); */
   class_addanything(pil_class, my_anything_method);
