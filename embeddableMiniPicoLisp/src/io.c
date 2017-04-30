@@ -894,12 +894,13 @@ any doOut(any ex) {
    /* popOutFiles(); */
    return x;
 }
-
+char outputBuffer[1024];
+char *outputCursor = outputBuffer;
 /*** Printing ***/
 void putStdout(int c) {
   c = c;
   // FIXME add callback here depending on target
-  putc(c, stdout);
+  *outputCursor++ = c;
 }
 
 void warn_error(char* mess) {

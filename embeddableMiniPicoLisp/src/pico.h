@@ -145,6 +145,8 @@ typedef struct catchFrame {
 /* Globals */
 extern int inputIdx;
 extern char *inputBuffer;
+extern char outputBuffer[1024];
+extern char *outputCursor;
 extern int Chr, Trace;
 extern char **AV, *AV0, *Home;
 extern heap *Heaps;

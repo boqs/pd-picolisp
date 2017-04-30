@@ -1,4 +1,8 @@
-#N canvas 0 46 1364 720 10;
+#N canvas 0 46 749 720 10;
 #X obj 291 245 counter;
 #X msg 275 113 (+ 1 2);
+#X msg 397 191 (foo 'bill 'ben);
+#X msg 409 139 (de foo (bar baz) (list baz bar bar baz));
 #X connect 1 0 0 0;
+#X connect 2 0 0 0;
+#X connect 3 0 0 0;

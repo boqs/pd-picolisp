@@ -40,8 +40,12 @@ void my_anything_method(t_counter *x, t_symbol *s, int argc, t_atom *argv) {
     }
   }
   strcat(txt_buffer,"\n");
+  outputCursor = outputBuffer;
+  *outputCursor = 0;
   readLispString(txt_buffer);
-  /* printf("\n%d\n", Chr); */
+  *outputCursor = 0;
+  sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
+  post(spare_txt_buffer);
 }
 
 void counter_setup(void) {
