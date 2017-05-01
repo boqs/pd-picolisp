@@ -303,7 +303,7 @@ long compare(any x, any y) {
 }
 
 /*** Error handling ***/
-void err(any ex, any x, char *fmt, ...) {
+void err_pil(any ex, any x, char *fmt, ...) {
    /* va_list ap; */
    char msg[240];
    /* outFrame f; */
@@ -348,18 +348,18 @@ any doQuit(any x) {
 
       bufString(y, msg);
       x = isCell(x = cdr(x))?  EVAL(car(x)) : NULL;
-      err(NULL, x, "%s", msg);
+      err_pil(NULL, x, "%s", msg);
    }
 }
 
-void argError(any ex, any x) {err(ex, x, "Bad argument");}
-void numError(any ex, any x) {err(ex, x, "Number expected");}
-void symError(any ex, any x) {err(ex, x, "Symbol expected");}
-void pairError(any ex, any x) {err(ex, x, "Cons pair expected");}
-void atomError(any ex, any x) {err(ex, x, "Atom expected");}
-void lstError(any ex, any x) {err(ex, x, "List expected");}
-void varError(any ex, any x) {err(ex, x, "Variable expected");}
-void protError(any ex, any x) {err(ex, x, "Protected symbol");}
+void argError(any ex, any x) {err_pil(ex, x, "Bad argument");}
+void numError(any ex, any x) {err_pil(ex, x, "Number expected");}
+void symError(any ex, any x) {err_pil(ex, x, "Symbol expected");}
+void pairError(any ex, any x) {err_pil(ex, x, "Cons pair expected");}
+void atomError(any ex, any x) {err_pil(ex, x, "Atom expected");}
+void lstError(any ex, any x) {err_pil(ex, x, "List expected");}
+void varError(any ex, any x) {err_pil(ex, x, "Variable expected");}
+void protError(any ex, any x) {err_pil(ex, x, "Protected symbol");}
 
 void unwind(catchFrame *catch) {
    any x;
@@ -472,7 +472,7 @@ any evExpr(any expr, any x) {
    return x;
 }
 
-void undefined(any x, any ex) {err(ex, x, "Undefined");}
+void undefined(any x, any ex) {err_pil(ex, x, "Undefined");}
 
 static any evList2(any foo, any ex) {
    cell c1;
@@ -759,16 +759,16 @@ void readLispString(char* inString) {
   /* printf("\n%d\n", Chr); */
 }
 
-/* int main(void) { */
-/*   pil_init(); */
-/*   readLispString("(+ 1 2)\n(+ 3 4))\n(+ 3 4 5)\n"); */
-/*   readLispString("(+ 1 5)\n(+ 3 4)\n"); */
-/*   readLispString("(de foo (bar baz qux) (list baz qux bar bar qux))\n"); */
+int main(void) {
+  pil_init();
+  readLispString("(+ 1 2)\n(+ 3 4))\n(+ 3 4 5)\n");
+  readLispString("(+ 1 5)\n(+ 3 4)\n");
+  readLispString("(de foo (bar baz qux) (list baz qux bar bar qux))\n");
 
-/*   if (!setjmp(ErrRst)) */
-/*     print_pl(testCallLisp("foo", box(1), box(2), box(3))); */
-/*   printf("\n"); */
+  if (!setjmp(ErrRst))
+    print_pl(testCallLisp("foo", box(1), box(2), box(3)));
+  printf("\n");
 
-/*   /\* bye(0); *\/ */
-/*   return 0; */
-/* } */
+  /* bye(0); */
+  return 0;
+}
