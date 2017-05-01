@@ -304,37 +304,39 @@ long compare(any x, any y) {
 
 /*** Error handling ***/
 void err_pil(any ex, any x, char *fmt, ...) {
-   /* va_list ap; */
-   char msg[240];
-   /* outFrame f; */
+  printf("entered err_pil\n");
+  
+   /* /\* va_list ap; *\/ */
+   /* char msg[240]; */
+   /* /\* outFrame f; *\/ */
 
-   Chr = 0;
-   Reloc = Nil;
-   Env.brk = NO;
-   /* pushOutFiles(&f); */
-   while (*AV  &&  strcmp(*AV,"-") != 0)
-      ++AV;
-   if (ex)
-      outString("!? "), print_pl(val(Up) = ex), newline();
-   if (x)
-      print_pl(x), outString(" -- ");
-   /* va_start(ap,fmt); */
-   /* vsnprintf(msg, sizeof(msg), fmt, ap); */
-   /* va_end(ap); */
-   warn_error(fmt);
-   if (msg[0]) {
-      outString(msg), newline();
-      val(Msg) = mkStr(msg);
-      if (!isNil(val(Err)) && !Jam)
-         Jam = YES,  prog(val(Err)),  Jam = NO;
-      load('?', Nil);
-   }
-   unwind(NULL);
-   Env.stack = NULL;
-   Env.next = -1;
-   Env.make = Env.yoke = NULL;
-   Env.parser = NULL;
-   Trace = 0;
+   /* Chr = 0; */
+   /* Reloc = Nil; */
+   /* Env.brk = NO; */
+   /* /\* pushOutFiles(&f); *\/ */
+   /* while (*AV  &&  strcmp(*AV,"-") != 0) */
+   /*    ++AV; */
+   /* if (ex) */
+   /*    outString("!? "), print_pl(val(Up) = ex), newline(); */
+   /* if (x) */
+   /*    print_pl(x), outString(" -- "); */
+   /* /\* va_start(ap,fmt); *\/ */
+   /* /\* vsnprintf(msg, sizeof(msg), fmt, ap); *\/ */
+   /* /\* va_end(ap); *\/ */
+   /* warn_error(fmt); */
+   /* if (msg[0]) { */
+   /*    outString(msg), newline(); */
+   /*    val(Msg) = mkStr(msg); */
+   /*    if (!isNil(val(Err)) && !Jam) */
+   /*       Jam = YES,  prog(val(Err)),  Jam = NO; */
+   /*    load('?', Nil); */
+   /* } */
+   /* unwind(NULL); */
+   /* Env.stack = NULL; */
+   /* Env.next = -1; */
+   /* Env.make = Env.yoke = NULL; */
+   /* Env.parser = NULL; */
+   /* Trace = 0; */
    longjmp(ErrRst, +1);
 }
 
