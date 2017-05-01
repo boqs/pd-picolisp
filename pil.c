@@ -15,6 +15,10 @@ typedef struct _pil {
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
   t_pil *x = (t_pil *)pd_new(pil_class);
   pil_init();
+  /* readLispString("(+ 1 2)\n"); */
+  /* readLispString("((+ 1 2)\n"); */
+  // FIXME currently pd explodes when lisp hits an error
+
   x->out = outlet_new(&x->x_obj, &s_symbol);  
 
   return (void *)x;
@@ -46,13 +50,14 @@ void my_anything_method(t_pil *x, t_symbol *s, int argc, t_atom *argv) {
   /* post(spare_txt_buffer); */
   outlet_symbol(x->out, gensym(spare_txt_buffer));  
 }
+
 void pil_bang(t_pil *x) {
   outputCursor = outputBuffer;
   *outputCursor = 0;
   readLispString("(bang)\n");
   *outputCursor = 0;
   /* post(spare_txt_buffer); */
-  /* outlet_symbol(x->out, gensym(outputBuffer));   */
+  outlet_symbol(x->out, gensym(outputBuffer));
 }
 
 void pil_load(t_pil *x, t_symbol *s) {

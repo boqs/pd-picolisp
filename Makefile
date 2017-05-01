@@ -13,7 +13,7 @@ embeddableMiniPicoLisp/src/tab.c \
 embeddableMiniPicoLisp/src/main.c
 
 
-cflags+= -IembeddableMiniPicoLisp/src/
+cflags+= -IembeddableMiniPicoLisp/src/ -g
 
 class.sources = pil.c
 
