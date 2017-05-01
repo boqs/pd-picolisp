@@ -849,7 +849,7 @@ any load(int pr, any x) {
          Push(c2, val(At));
          x = val(At) = EVAL(data(c1));
          val(At3) = val(At2),  val(At2) = data(c2);
-         outString("-> "),  print_pl(x),  newline();
+         print_pl(x),  newline();
       }
       drop(c1);
    }

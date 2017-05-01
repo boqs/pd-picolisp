@@ -757,7 +757,18 @@ void readLispString(char* inString) {
   inputBuffer= inString;
   Chr = ' ';
   if (setjmp(ErrRst) == 0)
-    load(':', Nil);
+    load(' ', Nil);
+  /* printf("\n%d\n", Chr); */
+}
+
+void readLispStrings(char* inString) {
+  inputIdx = 0;
+  inputBuffer= inString;
+  Chr = ' ';
+  while(inputBuffer[inputIdx]) {
+    if (setjmp(ErrRst) == 0)
+      load(' ', Nil);
+  }
   /* printf("\n%d\n", Chr); */
 }
 

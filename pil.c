@@ -68,7 +68,7 @@ void pil_load(t_pil *x, t_symbol *s) {
     fclose(f);
     outputCursor = outputBuffer;
     *outputCursor = 0;
-    readLispString(txt_buffer);
+    readLispStrings(txt_buffer);
     *outputCursor = 0;
     sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
     /* post(spare_txt_buffer); */
