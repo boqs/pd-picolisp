@@ -149,16 +149,22 @@ any doPDMessage(any x) {
     t_atom listSyms[256];
     any c = postData;
     for(i=0; i < 256 && !isNil(c); i++) {
-      pdPostCursor = pdPostBuffer;
-      *pdPostCursor = 0;
-      void (*savePut)(int) = Env.put;
-      Env.put = pdPostOut;
-      print_pl(car(c));
-      *pdPostCursor = 0;
-      Env.put = savePut;
-      /* post(pdPostBuffer); */
-      listSyms[i].a_type = A_SYMBOL;
-      listSyms[i].a_w.w_symbol = gensym(pdPostBuffer);
+      if(isSym(car(c)) || isTxt(car(c))) {
+	pdPostCursor = pdPostBuffer;
+	*pdPostCursor = 0;
+	void (*savePut)(int) = Env.put;
+	Env.put = pdPostOut;
+	print_pl(car(c));
+	*pdPostCursor = 0;
+	Env.put = savePut;
+	/* post(pdPostBuffer); */
+	listSyms[i].a_type = A_SYMBOL;
+	listSyms[i].a_w.w_symbol = gensym(pdPostBuffer);
+      }
+      else {
+	listSyms[i].a_type = A_FLOAT;
+	listSyms[i].a_w.w_float = (float) unBox(car(c));
+      }
       c = cdr(c);
     }
     /* printf("i = %d\n", i); */
