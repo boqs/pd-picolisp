@@ -1,40 +1,58 @@
-#N canvas 0 46 749 720 10;
+#N canvas 0 46 1364 720 10;
 #X obj 357 353 pil;
-#X msg 302 115 (+ 1 2);
-#X msg 596 57 (foo 'weasel 'badger);
-#X msg 48 147 load /home/rick/foo.l;
-#X obj 234 469 print pil_result;
-#X obj 647 192 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X msg 202 159 (+ 1 2);
+#X msg 692 125 (foo 'weasel 'badger);
+#X msg 13 81 load /home/rick/foo.l;
+#X obj 301 464 print pil_result;
+#X obj 716 249 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
-#X msg 418 164 (kaboom);
-#X msg 417 141 (nil);
-#X msg 21 202 (foo 1);
-#X msg 96 170 (bar 2);
-#X msg 619 236 (bang);
-#X msg 597 38 (de foo (bar baz) (list bar baz baz bar));
+#X msg 161 132 (kaboom);
+#X msg 235 190 (nil);
+#X msg 12 151 (foo 1);
+#X msg 61 104 (bar 2);
+#X msg 653 248 (bang);
+#X msg 693 106 (de foo (bar baz) (list bar baz baz bar));
 #X obj 486 446 print pd_result;
-#X msg 375 59 (pd-post 3);
-#X msg 415 119 (pd-bang);
-#X msg 387 80 (pd-post 'hoi);
-#X msg 198 41 (pd-message 'ratchop);
+#X msg 471 127 (pd-post 3);
+#X msg 744 21 (pd-bang);
+#X msg 483 148 (pd-post 'hoi);
+#X msg 294 109 (pd-message 'ratchop);
 #X obj 478 513 route list;
 #X obj 489 548 route hey;
 #X obj 498 582 route you;
 #X obj 675 662 print sum;
-#X msg 152 13 (pd-message '(hey you 45));
+#X msg 248 81 (pd-message '(hey you 45));
 #X obj 648 621 + 1;
 #X obj 522 634 print hey you;
-#X msg 676 214 1;
-#X msg 727 213 0;
-#X obj 798 267 print metrostate;
-#X msg 581 107 (setq ticks 0);
+#X msg 772 282 1;
+#X msg 823 281 0;
+#X obj 894 335 print metrostate;
+#X msg 636 201 (setq ticks 0);
 #X obj 48 442 print netreceive;
-#X obj 83 302 netreceive 6000;
-#X msg 630 166 (pd-post ticks);
-#X msg 365 31 (pd-post (list "hej" "u"));
-#X obj 677 261 metro 100;
-#X msg 584 131 (de bang() (setq ticks (+ 1 ticks))(list 'ticky ticks))
+#X obj 85 296 netreceive 6000;
+#X msg 745 252 (pd-post ticks);
+#X msg 461 99 (pd-post (list "hej" "u"));
+#X msg 639 225 (de bang() (setq ticks (+ 1 ticks))(list 'ticky ticks))
 ;
+#X obj 773 329 metro 1;
+#X text 154 366 picolisp lisp expression return values come out of
+the first inlet;
+#X text 487 403 puredata messages come out of the second inlet;
+#X text 4 232 send lisp expressions to pd on port 6000 using \, e.g
+netcat;
+#X text 4 46 load lisp expressions from a file using a load message
+;
+#X text 242 28 the lisp function pd-message outputs pd messages on
+pil's right hand outlet;
+#X text 469 47 the lisp function pd-post prints debug messages to pd's
+console output;
+#X text 691 86 this is an example of a lisp function definition;
+#X text 694 145 this is an example calling the function;
+#X text 822 9 this lisp function causes pil to emit a bang on it's
+right hand outlet;
+#X text 888 252 when pil receives pd bangs \, it calls the lisp function
+bang \, but does not emit any output to pil_result. Allows metro bangs
+to 'clock' a lisp program without generating output;
 #X connect 0 0 4 0;
 #X connect 0 1 17 0;
 #X connect 0 1 12 0;
@@ -59,9 +77,9 @@
 #X connect 21 0 0 0;
 #X connect 22 0 20 0;
 #X connect 24 0 26 0;
-#X connect 24 0 32 0;
+#X connect 24 0 33 0;
 #X connect 25 0 26 0;
-#X connect 25 0 32 0;
+#X connect 25 0 33 0;
 #X connect 27 0 0 0;
 #X connect 29 0 28 0;
 #X connect 29 0 0 0;
