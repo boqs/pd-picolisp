@@ -67,7 +67,7 @@ void pil_bang(t_pil *x) {
   readLispString("(bang)\n");
   *outputCursor = 0;
   /* post(spare_txt_buffer); */
-  outlet_anything(x->out, gensym(outputBuffer), 0, NULL);
+  /* outlet_anything(x->out, gensym(outputBuffer), 0, NULL); */
 }
 
 void pil_load(t_pil *x, t_symbol *s) {
