@@ -306,13 +306,13 @@ long compare(any x, any y) {
 void err_pil(any ex, any x, char *fmt, ...) {
   printf("entered err_pil\n");
   
-   /* /\* va_list ap; *\/ */
-   /* char msg[240]; */
+   va_list ap;
+   char msg[240];
    /* /\* outFrame f; *\/ */
 
    /* Chr = 0; */
-   /* Reloc = Nil; */
-   /* Env.brk = NO; */
+   Reloc = Nil;
+   Env.brk = NO;
    /* /\* pushOutFiles(&f); *\/ */
    /* while (*AV  &&  strcmp(*AV,"-") != 0) */
    /*    ++AV; */
@@ -320,9 +320,10 @@ void err_pil(any ex, any x, char *fmt, ...) {
    /*    outString("!? "), print_pl(val(Up) = ex), newline(); */
    /* if (x) */
    /*    print_pl(x), outString(" -- "); */
-   /* /\* va_start(ap,fmt); *\/ */
-   /* /\* vsnprintf(msg, sizeof(msg), fmt, ap); *\/ */
-   /* /\* va_end(ap); *\/ */
+   va_start(ap,fmt);
+   vsnprintf(msg, sizeof(msg), fmt, ap);
+   va_end(ap);
+   printf("%s\n", msg);
    /* warn_error(fmt); */
    /* if (msg[0]) { */
    /*    outString(msg), newline(); */
@@ -331,12 +332,12 @@ void err_pil(any ex, any x, char *fmt, ...) {
    /*       Jam = YES,  prog(val(Err)),  Jam = NO; */
    /*    load('?', Nil); */
    /* } */
-   /* unwind(NULL); */
-   /* Env.stack = NULL; */
-   /* Env.next = -1; */
-   /* Env.make = Env.yoke = NULL; */
-   /* Env.parser = NULL; */
-   /* Trace = 0; */
+   unwind(NULL);
+   Env.stack = NULL;
+   Env.next = -1;
+   Env.make = Env.yoke = NULL;
+   Env.parser = NULL;
+   Trace = 0;
    longjmp(ErrRst, +1);
 }
 
@@ -764,10 +765,10 @@ void readLispString(char* inString) {
 void readLispStrings(char* inString) {
   inputIdx = 0;
   inputBuffer= inString;
-  Chr = ' ';
-  while(inputBuffer[inputIdx]) {
-    if (setjmp(ErrRst) == 0)
-      load(' ', Nil);
+  while(inputBuffer[inputIdx] && setjmp(ErrRst) == 0) {
+    Chr = ' ';
+    load(' ', Nil);
+    printf("read lisp expr from file\n");
   }
   /* printf("\n%d\n", Chr); */
 }

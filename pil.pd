@@ -1,4 +1,4 @@
-#N canvas 0 46 1364 720 10;
+#N canvas 0 46 1054 1152 10;
 #X obj 291 245 pil;
 #X msg 275 113 (+ 1 2);
 #X msg 397 191 (foo 'weasel 'badger);
@@ -9,6 +9,8 @@
 -1;
 #X msg 368 93 (kaboom);
 #X msg 345 57 (nil);
+#X msg 111 201 (foo 1);
+#X msg 194 170 (bar 2);
 #X connect 0 0 5 0;
 #X connect 1 0 0 0;
 #X connect 2 0 0 0;
@@ -17,3 +19,5 @@
 #X connect 6 0 0 0;
 #X connect 7 0 0 0;
 #X connect 8 0 0 0;
+#X connect 9 0 0 0;
+#X connect 10 0 0 0;
