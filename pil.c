@@ -117,6 +117,17 @@ void pdPostOut(int c) {
   *pdPostCursor++ = c;
 }
 
+char *printPil(any x) {
+  pdPostCursor = pdPostBuffer;
+  *pdPostCursor = 0;
+  void (*savePut)(int) = Env.put;
+  Env.put = pdPostOut;
+  print_pl(x);
+  *pdPostCursor = 0;
+  Env.put = savePut;
+  return pdPostBuffer;
+}
+
 any doPDPost(any x) {
   any postData = EVAL(cadr(x));
   pdPostCursor = pdPostBuffer;
@@ -135,14 +146,7 @@ any doPDMessage(any x) {
   any postData = EVAL(cadr(x));
 
   if(isSym(postData) || isNum(postData)) {
-    pdPostCursor = pdPostBuffer;
-    *pdPostCursor = 0;
-    void (*savePut)(int) = Env.put;
-    Env.put = pdPostOut;
-    print_pl(postData);
-    *pdPostCursor = 0;
-    Env.put = savePut;
-    outlet_anything(lisp_obj->pd_out, gensym(pdPostBuffer), 0, NULL);
+    outlet_anything(lisp_obj->pd_out, gensym(printPil(postData)), 0, NULL);
   }
   else if (isCell(postData)) {
     int i;
@@ -150,16 +154,8 @@ any doPDMessage(any x) {
     any c = postData;
     for(i=0; i < 256 && !isNil(c); i++) {
       if(isSym(car(c)) || isTxt(car(c))) {
-	pdPostCursor = pdPostBuffer;
-	*pdPostCursor = 0;
-	void (*savePut)(int) = Env.put;
-	Env.put = pdPostOut;
-	print_pl(car(c));
-	*pdPostCursor = 0;
-	Env.put = savePut;
-	/* post(pdPostBuffer); */
 	listSyms[i].a_type = A_SYMBOL;
-	listSyms[i].a_w.w_symbol = gensym(pdPostBuffer);
+	listSyms[i].a_w.w_symbol = gensym(printPil(car (c)));
       }
       else {
 	listSyms[i].a_type = A_FLOAT;
