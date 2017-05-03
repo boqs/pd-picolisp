@@ -71,7 +71,7 @@ void pil_bang(t_pil *x) {
 }
 
 void pil_load(t_pil *x, t_symbol *s) {
-  printf("load: %s\n", s->s_name);
+  sprintf(spare_txt_buffer, "loading: %s ... ", s->s_name);
   FILE *f = fopen(s->s_name, "r");
   if (f) {
     fread(txt_buffer, sizeof(txt_buffer), 1, f);
@@ -80,7 +80,7 @@ void pil_load(t_pil *x, t_symbol *s) {
     *outputCursor = 0;
     readLispStrings(txt_buffer);
     *outputCursor = 0;
-    sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
+    strcat(spare_txt_buffer, "loaded!\n");
     post(spare_txt_buffer);
     /* outlet_symbol(x->out, gensym(spare_txt_buffer));   */
   }
@@ -145,8 +145,11 @@ any doPDPost(any x) {
 any doPDMessage(any x) {
   any postData = EVAL(cadr(x));
 
-  if(isSym(postData) || isNum(postData)) {
+  if(isSym(postData)) {
     outlet_anything(lisp_obj->pd_out, gensym(printPil(postData)), 0, NULL);
+  }
+  else if (isNum(postData)) {
+    outlet_float(lisp_obj->pd_out, (float) unBox(postData));
   }
   else if (isCell(postData)) {
     int i;

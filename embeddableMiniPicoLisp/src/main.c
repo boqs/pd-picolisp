@@ -768,7 +768,7 @@ void readLispStrings(char* inString) {
   while(inputBuffer[inputIdx] && setjmp(ErrRst) == 0) {
     Chr = ' ';
     load(' ', Nil);
-    printf("read lisp expr from file\n");
+    /* printf("read lisp expr from file\n"); */
   }
   /* printf("\n%d\n", Chr); */
 }
