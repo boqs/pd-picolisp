@@ -10,18 +10,22 @@ typedef struct _pil {
   t_symbol inSym;
   t_int i_down, i_up;
   t_outlet *out;
+  t_outlet *pd_out;
 } t_pil;
 
+t_pil *lisp_obj;
+
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
-  t_pil *x = (t_pil *)pd_new(pil_class);
+  lisp_obj = (t_pil *)pd_new(pil_class);
   pil_init();
   /* readLispString("(+ 1 2)\n"); */
   /* readLispString("((+ 1 2)\n"); */
   // FIXME currently pd explodes when lisp hits an error
 
-  x->out = outlet_new(&x->x_obj, &s_symbol);  
+  lisp_obj->out = outlet_new(&lisp_obj->x_obj, &s_symbol);
+  lisp_obj->pd_out = outlet_new(&lisp_obj->x_obj, &s_symbol);
 
-  return (void *)x;
+  return (void *)lisp_obj;
 }
 
 char txt_buffer[128 * 1024];
@@ -71,8 +75,8 @@ void pil_load(t_pil *x, t_symbol *s) {
     readLispStrings(txt_buffer);
     *outputCursor = 0;
     sprintf(spare_txt_buffer, "\n%s\n", outputBuffer);
-    /* post(spare_txt_buffer); */
-    outlet_symbol(x->out, gensym(spare_txt_buffer));  
+    post(spare_txt_buffer);
+    /* outlet_symbol(x->out, gensym(spare_txt_buffer));   */
   }
 }
 
@@ -92,4 +96,31 @@ void pil_setup(void) {
 
   /* class_addlist(pil_class, my_list_method); */
   class_sethelpsymbol(pil_class, gensym("help-pil"));
+}
+
+any doPDBang(any x) {
+  outlet_bang(lisp_obj->pd_out);
+  return Nil;
+}
+
+char pdPostBuffer[1024];
+char *pdPostCursor = pdPostBuffer;
+/*** Printing ***/
+void pdPostOut(int c) {
+  // FIXME add callback here depending on target
+  *pdPostCursor++ = c;
+}
+
+any doPDPost(any x) {
+  any postData = EVAL(cadr(x));
+  pdPostCursor = pdPostBuffer;
+  *pdPostCursor = 0;
+  void (*savePut)(int) = Env.put;
+  Env.put = pdPostOut;
+  print_pl(postData);
+  *pdPostCursor = 0;
+  Env.put = savePut;
+  post(pdPostBuffer);
+
+  return Nil;
 }

@@ -522,7 +522,18 @@ any doYoke(any);
 any doZap(any);
 any doZero(any);
 
+
+// PD-specific lisp commands
+
+// used by PD to read-eval the first lisp expression in a string
 void readLispString(char* inString);
+// used by PD to read-eval all the lisp expressions in a string
+void readLispStrings(char* inString);
+
+// functions used by picolisp to interact with PD
+any doPDBang(any);
+any doPDPost(any);
+
 
 /* List element access */
 static inline any nCdr(int n, any x) {

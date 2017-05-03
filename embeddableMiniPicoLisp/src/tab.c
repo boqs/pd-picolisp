@@ -281,6 +281,10 @@ static symInit Symbols[] = {
    {doYoke, "yoke"},
    {doZap, "zap"},
    {doZero, "zero"},
+   // PD-specific lisp functions
+   {doPDPost, "pd-post"},
+   {doPDBang, "pd-bang"},
+
 };
 
 static any initSym(any v, char *s) {
