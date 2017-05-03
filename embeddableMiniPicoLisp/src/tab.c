@@ -284,6 +284,7 @@ static symInit Symbols[] = {
    // PD-specific lisp functions
    {doPDPost, "pd-post"},
    {doPDBang, "pd-bang"},
+   {doPDMessage, "pd-message"},
 
 };
 

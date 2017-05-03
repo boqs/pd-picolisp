@@ -13,19 +13,25 @@ typedef struct _pil {
   t_outlet *pd_out;
 } t_pil;
 
-t_pil *lisp_obj;
+t_pil *lisp_obj = NULL;
 
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
-  lisp_obj = (t_pil *)pd_new(pil_class);
-  pil_init();
-  /* readLispString("(+ 1 2)\n"); */
-  /* readLispString("((+ 1 2)\n"); */
-  // FIXME currently pd explodes when lisp hits an error
+  if (lisp_obj == NULL) {
+    lisp_obj = (t_pil *)pd_new(pil_class);
+    pil_init();
+    /* readLispString("(+ 1 2)\n"); */
+    /* readLispString("((+ 1 2)\n"); */
+    // FIXME currently pd explodes when lisp hits an error
 
-  lisp_obj->out = outlet_new(&lisp_obj->x_obj, &s_symbol);
-  lisp_obj->pd_out = outlet_new(&lisp_obj->x_obj, &s_symbol);
+    lisp_obj->out = outlet_new(&lisp_obj->x_obj, &s_anything);
+    lisp_obj->pd_out = outlet_new(&lisp_obj->x_obj, &s_symbol);
+    return (void *)lisp_obj;
+  }
+  else {
+    post("can't create multiple picolisp objects in pd");
+    return NULL;
+  }
 
-  return (void *)lisp_obj;
 }
 
 char txt_buffer[128 * 1024];
@@ -52,7 +58,7 @@ void my_anything_method(t_pil *x, t_symbol *s, int argc, t_atom *argv) {
   *outputCursor = 0;
   sprintf(spare_txt_buffer, "%s", outputBuffer);
   /* post(spare_txt_buffer); */
-  outlet_symbol(x->out, gensym(spare_txt_buffer));  
+  outlet_anything(x->out, gensym(spare_txt_buffer), 0, NULL);
 }
 
 void pil_bang(t_pil *x) {
@@ -61,7 +67,7 @@ void pil_bang(t_pil *x) {
   readLispString("(bang)\n");
   *outputCursor = 0;
   /* post(spare_txt_buffer); */
-  outlet_symbol(x->out, gensym(outputBuffer));
+  outlet_anything(x->out, gensym(outputBuffer), 0, NULL);
 }
 
 void pil_load(t_pil *x, t_symbol *s) {
@@ -121,6 +127,43 @@ any doPDPost(any x) {
   *pdPostCursor = 0;
   Env.put = savePut;
   post(pdPostBuffer);
+
+  return Nil;
+}
+
+any doPDMessage(any x) {
+  any postData = EVAL(cadr(x));
+
+  if(isSym(postData) || isNum(postData)) {
+    pdPostCursor = pdPostBuffer;
+    *pdPostCursor = 0;
+    void (*savePut)(int) = Env.put;
+    Env.put = pdPostOut;
+    print_pl(postData);
+    *pdPostCursor = 0;
+    Env.put = savePut;
+    outlet_anything(lisp_obj->pd_out, gensym(pdPostBuffer), 0, NULL);
+  }
+  else if (isCell(postData)) {
+    int i;
+    t_atom listSyms[256];
+    any c = postData;
+    for(i=0; i < 256 && !isNil(c); i++) {
+      pdPostCursor = pdPostBuffer;
+      *pdPostCursor = 0;
+      void (*savePut)(int) = Env.put;
+      Env.put = pdPostOut;
+      print_pl(car(c));
+      *pdPostCursor = 0;
+      Env.put = savePut;
+      /* post(pdPostBuffer); */
+      listSyms[i].a_type = A_SYMBOL;
+      listSyms[i].a_w.w_symbol = gensym(pdPostBuffer);
+      c = cdr(c);
+    }
+    /* printf("i = %d\n", i); */
+    outlet_list(lisp_obj->pd_out, &s_list, i, listSyms);
+  }
 
   return Nil;
 }

@@ -533,6 +533,7 @@ void readLispStrings(char* inString);
 // functions used by picolisp to interact with PD
 any doPDBang(any);
 any doPDPost(any);
+any doPDMessage(any);
 
 
 /* List element access */
