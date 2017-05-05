@@ -18,7 +18,6 @@ t_pil *lisp_obj = NULL;
 void *pil_new(t_symbol *s, int argc, t_atom *argv) {
   if (lisp_obj == NULL) {
     lisp_obj = (t_pil *)pd_new(pil_class);
-    pil_init();
     /* readLispString("(+ 1 2)\n"); */
     /* readLispString("((+ 1 2)\n"); */
     // FIXME currently pd explodes when lisp hits an error
@@ -31,7 +30,12 @@ void *pil_new(t_symbol *s, int argc, t_atom *argv) {
     post("can't create multiple picolisp objects in pd");
     return NULL;
   }
+}
 
+void *pil_free(t_pil *p) {
+  printf("freeing pil obj...\n");
+  lisp_obj = NULL;
+  return NULL;
 }
 
 char txt_buffer[128 * 1024];
@@ -87,11 +91,12 @@ void pil_load(t_pil *x, t_symbol *s) {
 }
 
 void pil_setup(void) {
+  pil_init();
   pil_class = class_new(gensym("pil"),
-			    (t_newmethod)pil_new,
-			    0, sizeof(t_pil),
-			    CLASS_DEFAULT,
-			    A_GIMME, 0);
+			(t_newmethod)pil_new,
+			(t_method)pil_free, sizeof(t_pil),
+			CLASS_DEFAULT,
+			A_GIMME, 0);
   class_addbang  (pil_class, pil_bang);  
   /* class_addsymbol(pil_class, my_symbol_method); */
   /* class_addfloat(pil_class, my_float_method); */
@@ -105,8 +110,11 @@ void pil_setup(void) {
 }
 
 any doPDBang(any x) {
-  outlet_bang(lisp_obj->pd_out);
-  return Nil;
+  if(lisp_obj == NULL) {
+    return Nil;
+  }
+    outlet_bang(lisp_obj->pd_out);
+    return Nil;
 }
 
 char pdPostBuffer[1024];
@@ -143,6 +151,9 @@ any doPDPost(any x) {
 }
 
 any doPDMessage(any x) {
+  if (lisp_obj == NULL) {
+    return Nil;
+  }
   any postData = EVAL(cadr(x));
 
   if(isSym(postData)) {
