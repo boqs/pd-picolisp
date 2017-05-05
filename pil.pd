@@ -1,4 +1,4 @@
-#N canvas 0 46 1364 720 10;
+#N canvas 0 29 1054 1169 10;
 #X obj 357 353 pil;
 #X msg 202 159 (+ 1 2);
 #X msg 692 125 (foo 'weasel 'badger);
@@ -24,9 +24,6 @@
 #X msg 248 81 (pd-message '(hey you 45));
 #X obj 648 621 + 1;
 #X obj 522 634 print hey you;
-#X msg 772 282 1;
-#X msg 823 281 0;
-#X obj 894 335 print metrostate;
 #X msg 636 201 (setq ticks 0);
 #X obj 48 442 print netreceive;
 #X obj 85 296 netreceive 6000;
@@ -53,6 +50,8 @@ right hand outlet;
 #X text 888 252 when pil receives pd bangs \, it calls the lisp function
 bang \, but does not emit any output to pil_result. Allows metro bangs
 to 'clock' a lisp program without generating output;
+#X obj 783 285 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
 #X connect 0 0 4 0;
 #X connect 0 1 17 0;
 #X connect 0 1 12 0;
@@ -76,14 +75,11 @@ to 'clock' a lisp program without generating output;
 #X connect 19 0 23 0;
 #X connect 21 0 0 0;
 #X connect 22 0 20 0;
-#X connect 24 0 26 0;
-#X connect 24 0 33 0;
-#X connect 25 0 26 0;
-#X connect 25 0 33 0;
+#X connect 24 0 0 0;
+#X connect 26 0 25 0;
+#X connect 26 0 0 0;
 #X connect 27 0 0 0;
-#X connect 29 0 28 0;
+#X connect 28 0 0 0;
 #X connect 29 0 0 0;
 #X connect 30 0 0 0;
-#X connect 31 0 0 0;
-#X connect 32 0 0 0;
-#X connect 33 0 0 0;
+#X connect 41 0 30 0;
