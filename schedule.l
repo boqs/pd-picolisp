@@ -1,5 +1,5 @@
 (de reset-schedule-queue ()
-   (set 'schedule-queue Nil) )
+    (set 'schedule-queue Nil) )
 
 (de nest (fn ticks)
    (if (<= ticks 0)
@@ -10,9 +10,8 @@
 
 (de schedule (lambda ticks)
    (push 'schedule-queue
-      (nest
-	 (append lambda (list Nil))
-	 ticks ) ) )
+      (cons ticks
+	 lambda ) ) )
 
 (de schedule-loop (lambda n)
    (schedule (list Nil
@@ -21,15 +20,17 @@
       (- n  1)) )
 
 (de tick ()
-   (set 'schedule-queue
-      (let (schedule-queue-old schedule-queue)
-	 (let (schedule-queue Nil)
-	    (let (schedule-queue-new (mapcan
-			       '((x)
-				 (let (res (x))
-				    (when res
-				       (list res) ) ) )
-			       schedule-queue-old ) )
+    (set 'schedule-queue
+	 (let (schedule-queue-old schedule-queue)
+	   (let (schedule-queue Nil)
+	     (let (schedule-queue-new
+		   (mapcan
+		    '((x) (if (<= (car x) 0)
+			      (prog ((cdr x))
+			       Nil)
+			      (list (cons (dec (car x))
+					  (cdr x)))))
+		     schedule-queue-old ) )
 	       (append schedule-queue schedule-queue-new) ) ) ) ) )
 
 (de schedule-demo ()
@@ -43,4 +44,21 @@
    schedule-queue )
 
 (de flam (n speed lambda)
-   (for x n (schedule lambda (* x speed))))
+    (for x n (schedule lambda (* x speed))))
+
+##(flam 100 10 '(() (pd-message 'hh)))
+
+
+(de pat1 ()
+    (flam 10 7 '(() (pd-message 'bd))))
+
+## (pat1)
+## (schedule-loop pat1 79)
+
+(de pat2 ()
+    (schedule '(() (pd-message 'bd)) 5)
+    (flam 20 2 '(() (pd-message 'hh))))
+
+## (schedule-loop pat2 45)
+
+## (reset-schedule-queue)
