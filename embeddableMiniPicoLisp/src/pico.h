@@ -13,7 +13,7 @@
 
 #define WORD ((int)sizeof(long))
 #define BITS (8*WORD)
-#define CELLS (1024*1024/sizeof(cell))
+#define CELLS (128*1024*1024/sizeof(cell))
 
 typedef unsigned long word;
 typedef unsigned char byte;
@@ -145,7 +145,7 @@ typedef struct catchFrame {
 /* Globals */
 extern int inputIdx;
 extern char *inputBuffer;
-extern char outputBuffer[1024];
+extern char outputBuffer[];
 extern char *outputCursor;
 extern int Chr, Trace;
 extern char **AV, *AV0, *Home;

@@ -894,13 +894,17 @@ any doOut(any ex) {
    /* popOutFiles(); */
    return x;
 }
-char outputBuffer[1024];
+#define OUTPUT_BUFFER_SIZE (1024)
+
+char outputBuffer[OUTPUT_BUFFER_SIZE];
 char *outputCursor = outputBuffer;
 /*** Printing ***/
 void putStdout(int c) {
   c = c;
   // FIXME add callback here depending on target
-  *outputCursor++ = c;
+  if(outputCursor - outputBuffer < OUTPUT_BUFFER_SIZE - 2) {
+    *outputCursor++ = c;
+  }
 }
 
 void warn_error(char* mess) {
