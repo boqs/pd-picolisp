@@ -4,7 +4,7 @@
 #X obj 624 125 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
 #X obj 617 163 metro 100;
-#X obj 352 359 print pil_out;
+#X obj 368 344 print pil_out;
 #X msg 896 145 (pd-post ticks);
 #X obj 430 429 route bd;
 #X obj 590 416 route hh;
@@ -37,7 +37,7 @@
 #X obj 499 430 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X obj 687 131 hsl 128 15 0 127 0 0 empty empty empty -2 -8 0 10 -262144
--1 -1 9000 1;
+-1 -1 0 1;
 #X msg 744 282 (gc);
 #X obj 774 223 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
 1;
@@ -48,15 +48,15 @@ collection (gc) on timing;
 #X text 238 438 thump length;
 #X text 837 469 hiss length;
 #X text 495 450 thump manual trigger;
-#X text 675 403 hiss manual trigger;
+#X text 680 419 hiss manual trigger;
 #X text 446 549 thump volume;
 #X text 642 547 hiss volume;
 #X text 823 676 volume;
 #X obj 655 46 netreceive 6000;
 #X obj 544 840 *~ 0.5;
-#X obj 352 389 loadbang;
+#X obj 318 324 loadbang;
 #X msg 373 416 1;
-#X obj 899 387 loadbang;
+#X obj 856 328 loadbang;
 #X msg 860 436 0.5;
 #X msg 509 77 (pd-message 'hh);
 #X msg 7 207 (flam 10 1 '(() (pd-message 'hh)));
@@ -64,10 +64,10 @@ collection (gc) on timing;
 #X msg 12 53 (pd-post schedule-queue);
 #X obj 506 35 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
-#X msg 302 88 (de bang () (tick));
 #X msg 610 190 (schedule-loop '(();
-#X msg 191 12 load /home/rick/git_checkouts/picolisp_pd/schedule.l
-;
+#X msg 191 12 load schedule.l;
+#X obj 388 370 t f f;
+#X obj 844 359 t f f;
 #X connect 0 0 4 0;
 #X connect 0 1 6 0;
 #X connect 0 1 7 0;
@@ -105,14 +105,17 @@ collection (gc) on timing;
 #X connect 42 0 0 0;
 #X connect 43 0 23 0;
 #X connect 43 0 23 1;
-#X connect 44 0 45 0;
+#X connect 44 0 55 0;
 #X connect 45 0 11 0;
-#X connect 46 0 47 0;
+#X connect 46 0 56 0;
 #X connect 47 0 10 0;
 #X connect 48 0 0 0;
 #X connect 49 0 0 0;
 #X connect 50 0 0 0;
 #X connect 51 0 0 0;
 #X connect 52 0 0 0;
-#X connect 53 0 0 0;
-#X connect 55 0 0 0;
+#X connect 54 0 0 0;
+#X connect 55 0 28 0;
+#X connect 55 1 45 0;
+#X connect 56 0 27 0;
+#X connect 56 1 47 0;

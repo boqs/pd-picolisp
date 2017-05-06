@@ -33,6 +33,9 @@
 		     schedule-queue-old ) )
 	       (append schedule-queue schedule-queue-new) ) ) ) ) )
 
+(de bang ()
+    (tick))
+
 (de schedule-demo ()
    (reset-schedule-queue)
    (schedule '(() (prinl 'monkey)) 3)
