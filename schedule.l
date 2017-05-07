@@ -50,7 +50,7 @@
     (lambda)
     (for x (- n 1) (schedule lambda (* x speed))))
 
-##(flam 100 10 '(() (pd-message 'hh)))
+##(flam 16 1 '(() (pd-message 'hh)))
 
 
 (de pat1 ()
@@ -69,3 +69,32 @@
 ## (reset-schedule-queue)
 (de hush ()
     (reset-schedule-queue))
+
+(set 'rhyth '(hh - hh hh hh - - hh))
+
+(de do-pattern (pat)
+    (let (lambda Nil)
+      (when (not (= (car pat) '-))
+	(pd-message (car pat)))
+      (for i (length (cdr pat))
+	   (let (b (car (nth (cdr pat) i)))
+	     (when (not (= b '-))
+	       (schedule (list Nil
+			    (list 'pd-message (cons 'quote b)))
+			 i))))))
+
+(de loop-pattern (pat)
+    (schedule-loop (list Nil
+			 (list 'do-pattern (cons 'quote pat)))
+		   (length pat)))
+
+## (do-pattern rhyth)
+## (loop-pattern rhyth)
+
+(prog
+    (hush)
+   (flam 8 1 '(() (pd-message 'hh)))
+   (loop-pattern '(bd - - - bd - bd -))
+   (loop-pattern '(hh - hh - hh)))
+
+## (hush)
